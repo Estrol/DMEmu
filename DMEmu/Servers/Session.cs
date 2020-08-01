@@ -69,8 +69,11 @@ namespace DMEmu
             _data = new byte[MAX_PAYLOAD]; // ZeroMemory
 
             SocketState state = e.State;
-            ushort cmd = ToUint16(e.Buffer, 2);
-            ushort length = state.Buffer[0];
+            ushort cmd = BitConverter.ToUInt16(e.Buffer, 2);
+
+            byte[] length1 = new byte[2];
+            Buffer.BlockCopy(state.Buffer, 0, length1, 0, 2);
+            ushort length = BitConverter.ToUInt16(length1, 0);
 
             Console.WriteLine("[ DEBUG ] Got " + cmd + " which " + Convert.ToString(cmd, 16));
             Console.WriteLine();
@@ -180,6 +183,13 @@ namespace DMEmu
                         break;
                     }
 
+                case 0x07dc:
+                    {
+                        Console.WriteLine("Just a message, skip it to next packets!");
+                        ws.ReadAgain(state);
+                        break;
+                    }
+
                 case 0x13a4:
                     {
                         Console.WriteLine("No idea lol");
@@ -192,10 +202,31 @@ namespace DMEmu
                         break;
                     }
 
-                case 0x07dc:
+                case 0x07d4:
                     {
-                        Console.WriteLine("Just a message, skip it to next packets!");
-                        ws.ReadAgain(state);
+                        byte[] roomName = new byte[4];
+                        Buffer.BlockCopy(state.Buffer, 4, roomName, 0, 4);
+
+                        Console.WriteLine("Room creation: {0}", Encoding.UTF8.GetString(roomName));
+                        byte[] packets =
+                        {
+                            0x0d, 0x00, 0xd6, 0x07, 0x00, 0x00, 0x00, 0x00,
+                            0x00, 0x00, 0x00, 0x00, 0x00
+                        };
+
+                        Write(state, packets);
+                        flag = true;
+                        break;
+                    }
+
+                case 0x07e8:
+                    {
+                        Console.WriteLine("Massive payload it says, but whatever");
+                        byte[] packets =
+                        {
+                            0x04, 0x00, 0xe9, 0x07
+                        };
+                        Write(state, packets);
                         break;
                     }
 
@@ -211,17 +242,6 @@ namespace DMEmu
                         break;
                     }
 
-                case 0x07e8:
-                    {
-                        Console.WriteLine("Massive payload it says, but whatever");
-                        byte[] packets =
-                        {
-                            0x04, 0x00, 0xe9, 0x07
-                        };
-                        Write(state, packets);
-                        break;
-                    }
-
                 case 0x03ef:
                     {
                         Console.WriteLine("Got login credentials");
@@ -232,23 +252,6 @@ namespace DMEmu
                         };
 
                         Write(state, packets);
-                        break;
-                    }
-
-                case 0x07d4:
-                    {
-                        byte[] roomName = new byte[state.Buffer.Length - 4];
-                        Buffer.BlockCopy(state.Buffer, 4, roomName, 0, state.Buffer.Length - 4);
-
-                        Console.WriteLine("Room creation: {0}", Encoding.UTF8.GetString(roomName));
-                        byte[] packets =
-                        {
-                            0x0d, 0x00, 0xd6, 0x07, 0x00, 0x00, 0x00, 0x00,
-                            0x00, 0x00, 0x00, 0x00, 0x00
-                        };
-
-                        Write(state, packets);
-                        flag = true;
                         break;
                     }
 
@@ -291,7 +294,7 @@ namespace DMEmu
                         while (ReplyStack.Count != 0)
                         {
                             IEnumerable<byte[]> repl_ = ReplyStack.Take(1);
-                            byte[] repl = repl_.ToArray()[0];
+                            byte[] repl = repl_.ToArray().First();
                             Write(state, repl);
 
                             ReplyStack.Remove(repl);
@@ -332,10 +335,13 @@ namespace DMEmu
                         Console.WriteLine("Song finish/quit?");
                         byte[] packets =
                         {
-                            0x98, 0x00, 0xb6, 0x0f, 0x00, 0x1e, 0x00, 0x00, 0x00
+                            0x09, 0x00, 0xb6, 0x0f, 0x00, 0x1e, 0x00, 0x00, 0x00
                         };
                         ReplyStack.Clear();
                         Write(state, packets);
+
+                        flag = true;
+
                         break;
                     }
 
@@ -395,13 +401,6 @@ namespace DMEmu
             Buffer.BlockCopy(_data, 0, DataToSend, 0, length);
 
             ws.SendData(state, DataToSend);
-        }
-
-        public static ushort ToUint16(byte[] Buffer, int startIndex)
-        {
-            ushort value = BitConverter.ToUInt16(Buffer, startIndex);
-
-            return value;
         }
     }
 }
