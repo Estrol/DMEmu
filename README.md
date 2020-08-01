@@ -1,13 +1,18 @@
 # DerpSamoJam Server Emulator
-A O2-JAM Server Emulator for [DMJam](http://dpjam.net) \
-This server will find file:
+A O2-JAM Server Emulator for [DMJam](http://dpjam.net) 
+* **Author**: Estrol
+* **Email**: support@entrosbot.xyz 
+
+
+## Runtime requirements
+This server will look into these files to make function like normal server:
 
 | Files  | Use for |
 | -------- | --------|
-| D007.spt | User's character  |
-| D207.spt    | Room list/Login info  |
-| MusicList.spt     | Music list from server  | 
-| Channel1.spt     | List available channels on a planet  | 
+| D007.spt | User's character |
+| D207.spt | Room list/Login info |
+| MusicList.spt | Music list from server | 
+| Channel1.spt | List available channels on a planet | 
 
 
 ## Build requirements
