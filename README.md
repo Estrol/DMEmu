@@ -11,14 +11,12 @@ The current completion server emulator:
 | -------- | --------|
 | STATE_LOGIN | Finished |
 | STATE_PLANET | Finished |
-| STATE_LOBBY | Partical Finished (95%) | 
-| STATE_WAITING | Partical Finished (60%) | 
-| STATE_PLAYING | Partical Finished (50%) |
+| STATE_LOBBY | Finished| 
+| STATE_WAITING | Finished | 
+| STATE_PLAYING | Partical Finished (70%) |
 | STATE_FINISH | Broken (0%) |
 
 Partical finished/Broken explained:
-* STATE_LOBBY: Back to channel list broken, and client sending weird packets
-* STATE_WAITING: Back to lobby, and some untested packets
 * STATE_PLAYING: Some untested packets
 * STATE_FINISH: Client sending weird packets on song finish, must use exit button to finish the song.
 

@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DMEmu
@@ -16,18 +9,29 @@ namespace DMEmu
     {
         public Point mouseLocation;
         public string playerName;
+        public Form1 mainForm;
         public int serverPort;
         public int webPort;
 
-        public Form2()
+        public Form2(Form1 mainForm)
         {
             InitializeComponent();
             this.CenterToScreen();
+            this.mainForm = mainForm;
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
             byte[] fileBuffer = File.ReadAllBytes(Application.StartupPath + @"\Spt\LauncherSettings.Spt");
+
+            uint webPort = BitConverter.ToUInt16(fileBuffer, 21);
+            uint gamePort = BitConverter.ToUInt16(fileBuffer, 27);
+
+            Console.WriteLine("Port: {0}, web: {1}", gamePort, webPort);
+
+            this.textBox2.Text = gamePort.ToString();
+            this.textBox3.Text = webPort.ToString();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -74,6 +78,44 @@ namespace DMEmu
         {
             Form4 settingsDialog = new Form4();
             settingsDialog.ShowDialog();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.mainForm.session.LoadData();
+            byte[] MusicBuffer = File.ReadAllBytes(Application.StartupPath + @"\Spt\MusicList.Spt");
+        }
+
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

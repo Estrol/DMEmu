@@ -13,7 +13,7 @@ namespace DMEmu
     public class Session
     {
         public SocketServer ws;
-        public Dictionary<string, byte[]> SptFiles = new Dictionary<string, byte[]>();
+        public static Dictionary<string, byte[]> SptFiles = new Dictionary<string, byte[]>();
         public static int MAX_PAYLOAD = 10248;
         public static byte[] _data = new byte[MAX_PAYLOAD]; // Max payload
         public static bool flag = false;
@@ -43,6 +43,8 @@ namespace DMEmu
 
         public void LoadData()
         {
+            SptFiles.Clear();
+
             Console.WriteLine("Loading Channel1.spt");
             Main.UpdateLoadingText("Loading Channel1.spt");
             byte[] Channel1 = File.ReadAllBytes(Application.StartupPath + @"\Spt\Channel1.Spt");
@@ -83,7 +85,7 @@ namespace DMEmu
                 case 0x03f1:
                     {
                         Console.WriteLine("A client logged in!");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x37, 0x00, 0xf2, 0x03, 0x02, 0x00, 0x00, 0x5d,
                             0xfe, 0xda, 0xad, 0xf5, 0x7f, 0x6b, 0x0e, 0x49,
@@ -101,7 +103,7 @@ namespace DMEmu
                 case 0x03f3:
                     {
                         Console.WriteLine("A client login again!");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x37, 0x00, 0xf4, 0x03, 0x40, 0xba, 0x11, 0x36,
                             0x84, 0x0d, 0x40, 0x7b, 0x78, 0x64, 0x2a, 0xc9,
@@ -136,7 +138,6 @@ namespace DMEmu
                         break;
                     }
 
-                case 0x07e5:
                 case 0x03ea:
                     {
                         Console.WriteLine("Getting channel details");
@@ -193,7 +194,7 @@ namespace DMEmu
                 case 0x13a4:
                     {
                         Console.WriteLine("No idea lol");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x08, 0x00, 0xa5, 0x13, 0xb3, 0x11, 0x01, 0x00
                         };
@@ -208,7 +209,7 @@ namespace DMEmu
                         Buffer.BlockCopy(state.Buffer, 4, roomName, 0, 4);
 
                         Console.WriteLine("Room creation: {0}", Encoding.UTF8.GetString(roomName));
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x0d, 0x00, 0xd6, 0x07, 0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00, 0x00
@@ -222,7 +223,7 @@ namespace DMEmu
                 case 0x07e8:
                     {
                         Console.WriteLine("Massive payload it says, but whatever");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x04, 0x00, 0xe9, 0x07
                         };
@@ -233,7 +234,7 @@ namespace DMEmu
                 case 0x03e8:
                     {
                         Console.WriteLine("Channel login!");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x08, 0x00, 0xe9, 0x03, 0x00, 0x00, 0x00, 0x00
                         };
@@ -245,7 +246,7 @@ namespace DMEmu
                 case 0x03ef:
                     {
                         Console.WriteLine("Got login credentials");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x0c, 0x00, 0xf0, 0x03, 0x00, 0x00, 0x00, 0x00,
                             0xee, 0x60, 0x01, 0x00
@@ -278,7 +279,7 @@ namespace DMEmu
                 case 0x0fa4:
                     {
                         Console.WriteLine("Preparing room stuff, waiting to load...");
-                        byte[] packets = { 0x06, 0x00, 0xa5, 0x0f, 0x00, 0x00 };
+                        byte[] packets = new byte[] { 0x06, 0x00, 0xa5, 0x0f, 0x00, 0x00 };
                         ReplyStack.Add(packets);
                         ws.ReadAgain(state);
 
@@ -288,7 +289,7 @@ namespace DMEmu
                 case 0x0fb7:
                     {
                         Console.WriteLine("Finished loading room, sending all replied buffer");
-                        byte[] packets = { 0x09, 0x00, 0xb8, 0x0f, 0x01, 0x00, 0x00, 0x00, 0x00 };
+                        byte[] packets = new byte[] { 0x09, 0x00, 0xb8, 0x0f, 0x01, 0x00, 0x00, 0x00, 0x00 };
                         Write(state, packets);
 
                         while (ReplyStack.Count != 0)
@@ -305,10 +306,34 @@ namespace DMEmu
                         break;
                     }
 
+                case 0x07e5:
+                    {
+                        Console.WriteLine("User exit lobby");
+                        byte[] packets = new byte[]
+                        {
+                            0x08, 00, 0xe6, 0x07, 0x00, 0x00, 0x00, 0x00
+                        };
+                        Write(state, packets);
+                        break;
+                    }
+
+                case 0x0bbd:
+                    {
+                        Console.WriteLine("User exit room");
+                        byte[] packets = new byte[]
+                        {
+                            0x08, 0x00, 0xbe, 0x0b, 0x00, 0x00, 0x00, 0x00
+                        };
+
+                        if (flag) flag = false;
+                        Write(state, packets);
+                        break;
+                    }
+
                 case 0x0faa:
                     {
                         Console.WriteLine("Song play 1");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x0c, 0x00, 0xab, 0x0f, 0x00, 0x00, 0x00, 0x00,
                             0x093, 0x21, 0x74, 0x025
@@ -321,7 +346,7 @@ namespace DMEmu
                 case 0x0fac:
                     {
                         Console.WriteLine("Song play 2");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
                             0x05, 0x00, 0xad, 0x0f, 0x00
                         };
@@ -333,15 +358,47 @@ namespace DMEmu
                 case 0x0fb5:
                     {
                         Console.WriteLine("Song finish/quit?");
-                        byte[] packets =
+                        byte[] packets = new byte[]
                         {
-                            0x09, 0x00, 0xb6, 0x0f, 0x00, 0x1e, 0x00, 0x00, 0x00
+                            0x09, 0x00, 0xb6, 0x0f, 0x00, 0x64, 0x00, 0x00, 0x00
                         };
                         ReplyStack.Clear();
                         Write(state, packets);
 
                         flag = true;
 
+                        break;
+                    }
+
+                case 0x0fb0:
+                    {
+                        Console.WriteLine("Song finish, Showing result screen");
+                        byte[] packets = new byte[]
+                        {
+                            0x06, 0x00, 0xb1, 0x0f, 0x00, 0x01
+                        };
+                        Write(state, packets);
+
+                        break;
+                    }
+
+                case 0xb10f:
+                    {
+                        Console.WriteLine("Song finish!");
+                        byte[] packets = new byte[]
+                        {
+                            0x4c, 0x00, 0xb2, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00,
+                            0x01, 0x00, 0x00, 0x00, 0xd7, 0x01, 0x21, 0x00, 0x00,
+                            0x00, 0x02, 0x00, 0x21, 0x01, 0x13, 0x00, 0x4f, 0xd2, 
+                            0x01, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00, 0xb2, 
+                            0xf6, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 
+                            0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
+                            0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 
+                            0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x07, 
+                            0x00, 0x00, 0x00, 0x00
+                        };
+
+                        Write(state, packets);
                         break;
                     }
 

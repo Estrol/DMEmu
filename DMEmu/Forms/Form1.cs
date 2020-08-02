@@ -114,7 +114,7 @@ namespace DMEmu
                 form2.Focus();
             } else
             {
-                form2 = new Form2();
+                form2 = new Form2(this);
                 form2.Show();
             }
         }

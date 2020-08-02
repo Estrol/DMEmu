@@ -160,7 +160,7 @@ namespace DMEmu
     }
     public class SocketState
     {
-        public const int BUFFER_SIZE = 225;
+        public const int BUFFER_SIZE = 10248;
         public Socket Socket;
         public byte[] Buffer;
         public MemoryStream Data;
