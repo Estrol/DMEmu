@@ -16,6 +16,7 @@ namespace DMEmu
         public Form2(Form1 mainForm)
         {
             InitializeComponent();
+            (new DropShadow()).ApplyShadows(this);
             this.CenterToScreen();
             this.mainForm = mainForm;
         }
@@ -32,6 +33,15 @@ namespace DMEmu
             this.textBox2.Text = gamePort.ToString();
             this.textBox3.Text = webPort.ToString();
 
+            try {
+                Data.OJNList list = this.mainForm.session.GetList();
+                this.totalSong.Text = list.GetHeaders().Length.ToString();
+            }
+            catch (Exception err) {
+                if (err.Message != "OJNList not loaded.") {
+                    throw err;
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -82,8 +92,14 @@ namespace DMEmu
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.mainForm.session.LoadData();
-            byte[] MusicBuffer = File.ReadAllBytes(Application.StartupPath + @"\Spt\MusicList.Spt");
+            try {
+                Data.OJNList list = this.mainForm.session.GetList();
+                this.totalSong.Text = list.GetHeaders().Length.ToString();
+            } catch (Exception err) {
+                if (err.Message != "OJNList not loaded.") {
+                    throw err;
+                }
+            }
         }
 
 

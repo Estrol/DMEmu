@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <LangVersion>8.0</LangVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -46,6 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Form6.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form6.Designer.cs">
+      <DependentUpon>Form6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form5.Designer.cs">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,11 +95,26 @@
     <Compile Include="Forms\Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Data\OJN.cs" />
+    <Compile Include="Utility\Data\OJNList.cs" />
+    <Compile Include="Utility\Data\PlayerData.cs" />
+    <Compile Include="Utility\DropShadow.cs" />
     <Compile Include="Utility\INIReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\Session.cs" />
     <Compile Include="Servers\SocketServer.cs" />
+    <Compile Include="Utility\OJNDecoder.cs" />
+    <Compile Include="Utility\OJNListDecoder.cs" />
+    <Compile Include="Utility\Logging.cs" />
+    <Compile Include="Utility\OJNListRead.cs" />
+    <Compile Include="Utility\Utils.cs" />
+    <EmbeddedResource Include="Forms\Form6.resx">
+      <DependentUpon>Form6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form5.resx">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageBox.resx">
       <DependentUpon>MessageBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -95,6 +123,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ErrorForm.resx">
       <DependentUpon>ErrorForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form4.resx">
       <DependentUpon>Form4.cs</DependentUpon>

@@ -12,7 +12,7 @@ namespace DMEmu
         private static Socket _serverSocket;
         private short _port;
 
-        public delegate void OnTCPData(object sender, TCPData e);
+        public delegate void OnTCPData(object sender, SocketState state);
         public event OnTCPData OnUpdateStatus;
 
         public SocketServer(short port)
@@ -37,10 +37,10 @@ namespace DMEmu
             {
                 Socket newSocket = (Socket)result.AsyncState;
                 state.Socket = newSocket.EndAccept(result);
-                state.Buffer = new byte[SocketState.BUFFER_SIZE];
+                state.rawBuffer = new byte[SocketState.BUFFER_SIZE];
                 state.Data = new MemoryStream();
 
-                state.Socket.BeginReceive(state.Buffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, SocketDataCallback, state);
+                state.Socket.BeginReceive(state.rawBuffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, SocketDataCallback, state);
                 _serverSocket.BeginAccept(new AsyncCallback(SocketConnectionCallback), _serverSocket);
             }
             catch (Exception e)
@@ -66,9 +66,6 @@ namespace DMEmu
 
         public void SendData(SocketState state, byte[] data)
         {
-            Console.WriteLine("[ DEBUG ] Sending data....");
-            foreach (byte a in data) Console.Write(" {0}", Convert.ToString(a, 16));
-            Console.WriteLine();
             state.Socket.BeginSend(data, 0, data.Length, 0, new AsyncCallback(SocketSendCallback), state);
         }
 
@@ -78,9 +75,7 @@ namespace DMEmu
             try
             {
                 int byteSend = state.Socket.EndSend(result);
-                Console.WriteLine("[ DEBUG ] Sending {0} bytes", byteSend);
-                Console.WriteLine("[ DEBUG ] Sending complete, Now waiting another packets");
-                state.Socket.BeginReceive(state.Buffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, new AsyncCallback(SocketDataCallback), state);
+                state.Socket.BeginReceive(state.rawBuffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, new AsyncCallback(SocketDataCallback), state);
             }
             catch (Exception e)
             {
@@ -105,11 +100,14 @@ namespace DMEmu
 
         private void SocketDataCallback(IAsyncResult result)
         {
-            Console.WriteLine("[ DEBUG ] Success receiving data, now emitting...");
             SocketState state = (SocketState)result.AsyncState;
             try
             {
-                state.readBytes = state.Socket.EndReceive(result);
+                byte[] tmpBuffer = new byte[state.rawBuffer[0]];
+                Buffer.BlockCopy(state.rawBuffer, 0, tmpBuffer, 0, state.rawBuffer[0]);
+                state.Buffer = tmpBuffer;
+                state.packetLength = tmpBuffer[0];
+
                 Emit(state);
             }
             catch (Exception e)
@@ -141,16 +139,14 @@ namespace DMEmu
 
         public bool ReadAgain(SocketState state)
         {
-            state.Socket.BeginReceive(state.Buffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, new AsyncCallback(SocketDataCallback), state);
+            state.Socket.BeginReceive(state.rawBuffer, 0, SocketState.BUFFER_SIZE, SocketFlags.None, new AsyncCallback(SocketDataCallback), state);
             return true;
         }
 
         private void Emit(SocketState state)
         {
             if (OnUpdateStatus == null) return;
-
-            TCPData data = new TCPData(state.Buffer, state);
-            OnUpdateStatus(this, data);
+            OnUpdateStatus(this, state);
         }
 
         private void CloseSocket(SocketState ci)
@@ -162,20 +158,9 @@ namespace DMEmu
     {
         public const int BUFFER_SIZE = 10248;
         public Socket Socket;
+        public byte[] rawBuffer;
         public byte[] Buffer;
         public MemoryStream Data;
-        public int readBytes;
-    }
-
-    public class TCPData : EventArgs
-    {
-        public byte[] Buffer { get; private set; }
-        public SocketState State;
-
-        public TCPData(byte[] data, SocketState stateRaw)
-        {
-            Buffer = data;
-            State = stateRaw;
-        }
+        public int packetLength;
     }
 }

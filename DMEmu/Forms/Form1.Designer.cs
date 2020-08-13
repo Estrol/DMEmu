@@ -39,6 +39,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button6 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -52,14 +54,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(248, 25);
+            this.panel1.Size = new System.Drawing.Size(656, 25);
             this.panel1.TabIndex = 0;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(191, 1);
+            this.button2.Location = new System.Drawing.Point(598, 1);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(26, 22);
             this.button2.TabIndex = 2;
@@ -69,7 +71,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(220, 1);
+            this.button1.Location = new System.Drawing.Point(627, 1);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(26, 22);
             this.button1.TabIndex = 1;
@@ -92,9 +94,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(28, 127);
+            this.button3.Location = new System.Drawing.Point(26, 139);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(193, 45);
+            this.button3.Size = new System.Drawing.Size(193, 29);
             this.button3.TabIndex = 1;
             this.button3.Text = "Start Game";
             this.button3.UseVisualStyleBackColor = true;
@@ -102,9 +104,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(28, 177);
+            this.button4.Location = new System.Drawing.Point(26, 207);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(193, 45);
+            this.button4.Size = new System.Drawing.Size(193, 27);
             this.button4.TabIndex = 2;
             this.button4.Text = "Settings";
             this.button4.UseVisualStyleBackColor = true;
@@ -112,9 +114,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(28, 226);
+            this.button5.Location = new System.Drawing.Point(26, 240);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(193, 45);
+            this.button5.Size = new System.Drawing.Size(193, 30);
             this.button5.TabIndex = 3;
             this.button5.Text = "Info";
             this.button5.UseVisualStyleBackColor = true;
@@ -125,7 +127,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(31, 36);
+            this.label2.Location = new System.Drawing.Point(31, 34);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(188, 31);
             this.label2.TabIndex = 4;
@@ -136,7 +138,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(59, 68);
+            this.label3.Location = new System.Drawing.Point(59, 66);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(126, 31);
             this.label3.TabIndex = 5;
@@ -158,17 +160,41 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(28, 98);
+            this.panel2.Location = new System.Drawing.Point(26, 110);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(193, 23);
             this.panel2.TabIndex = 7;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(26, 174);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(193, 27);
+            this.button6.TabIndex = 9;
+            this.button6.Text = "Character Editor";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.InfoText;
+            this.textBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.textBox1.Location = new System.Drawing.Point(231, 43);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(413, 226);
+            this.textBox1.TabIndex = 10;
+            this.textBox1.Text = "TBA";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(248, 290);
+            this.ClientSize = new System.Drawing.Size(656, 290);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -202,6 +228,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel2;
         public System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

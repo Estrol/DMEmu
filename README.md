@@ -13,12 +13,14 @@ The current completion server emulator:
 | STATE_PLANET | Finished |
 | STATE_LOBBY | Finished| 
 | STATE_WAITING | Finished | 
-| STATE_PLAYING | Partical Finished (70%) |
-| STATE_FINISH | Broken (0%) |
+| STATE_PLAYING | Finished |
+| STATE_FINISH | Finished |
 
-Partical finished/Broken explained:
-* STATE_PLAYING: Some untested packets
-* STATE_FINISH: Client sending weird packets on song finish, must use exit button to finish the song.
+Finished packet constructor:
+* OJNList.dat - MusicList.spt not required to generated again, however the OJNList.dat must valid else the game will throw `Invalid music list`
+
+Currently Working at:
+* Character Editor (Need decode at D007.spt)
 
 ## Runtime requirements
 This server will look into these files to make function like normal server:
@@ -42,6 +44,7 @@ This server will look into these files to make function like normal server:
 
 ## Credits
 * [djask](https://github.com/djask) - This based on his/her [o2jam-server-emu](https://github.com/djask/o2jam-server-emu)
+* [SirusDoma](https://github.com/SirusDoma) - OJNList formatting source code 
 
 ## License
 This software licensed under the [MIT License](License)

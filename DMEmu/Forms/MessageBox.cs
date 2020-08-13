@@ -16,6 +16,7 @@ namespace DMEmu
         public MessageBox()
         {
             InitializeComponent();
+            (new DropShadow()).ApplyShadows(this);
             this.CenterToScreen();
             this.msgPanel.Hide();
             this.msgPanel2.Hide();

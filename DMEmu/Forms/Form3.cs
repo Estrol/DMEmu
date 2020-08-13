@@ -16,6 +16,7 @@ namespace DMEmu
         public Form3()
         {
             InitializeComponent();
+            (new DropShadow()).ApplyShadows(this);
             this.CenterToScreen();
         }
 
